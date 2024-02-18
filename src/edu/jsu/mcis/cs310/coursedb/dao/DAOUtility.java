@@ -11,12 +11,29 @@ public class DAOUtility {
     public static String getResultSetAsJson(ResultSet rs) {
         
         JsonArray records = new JsonArray();
+       
         
         try {
         
             if (rs != null) {
 
-                // INSERT YOUR CODE HERE
+            // Get metadata to retrieve information about the columns
+            ResultSetMetaData metadata = rs.getMetaData();
+            int columnCount = metadata.getColumnCount();
+            
+            // Iterate through each row in the ResultSet
+            while (rs.next()) {
+                JsonObject row = new JsonObject();
+                
+                // Iterate through each column in the row
+                for (int i = 1; i <= columnCount; ++i) {
+                    String columnname = metadata.getColumnName(i);// Get the column name
+                    row.put(columnname, rs.getObject(i).toString());// Get the column value
+
+                }
+                // Add the row to the JsonArray
+                records.add(row);
+            }
 
             }
             
